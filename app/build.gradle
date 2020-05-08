@@ -1,0 +1,84 @@
+apply plugin: 'com.android.application'
+apply plugin: 'realm-android'
+
+allprojects {
+	repositories {
+		jcenter()
+		google()
+		maven { url "https://jitpack.io" }
+		maven { url "https://maven.google.com" }
+	}
+}
+buildscript{
+	repositories {
+		jcenter()
+		mavenCentral()
+		google()
+		maven { url "https://maven.google.com" }
+		maven { url "http://dl.bintray.com/countly/maven" }
+	}
+}
+android {
+	compileSdkVersion 29
+	buildToolsVersion "29.0.0"
+	
+	defaultConfig {
+		applicationId "m.pgmacdesign.dagger2examples"
+		minSdkVersion 21
+		targetSdkVersion 29
+		versionCode 1
+		versionName "1.0"
+		
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+	}
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
+	buildTypes {
+		release {
+			minifyEnabled false
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+		}
+	}
+	
+}
+
+dependencies {
+	implementation fileTree(dir: 'libs', include: ['*.jar'])
+	
+	implementation 'androidx.appcompat:appcompat:1.1.0'
+	implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+	testImplementation 'junit:junit:4.12'
+	androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+	androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+	
+	
+	def material_version = "1.0.0"
+	implementation "com.google.android.material:material:$material_version"
+	
+	implementation 'com.google.code.gson:gson:2.8.5'
+	//Retrofit, Retrofit Converters, and OKHTTP.
+	//Retrofit - https://github.com/square/retrofit
+	//OKHttp - https://github.com/square/okhttp
+	implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+	implementation 'com.squareup.okhttp3:okhttp:3.12.8'
+	implementation 'com.squareup.okhttp3:logging-interceptor:3.12.8'
+	
+	//Type-safe HTTP client for Android and Java: https://github.com/square/retrofit
+	implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+	
+	//OKIO. Link: https://github.com/square/okio
+	implementation 'com.squareup.okio:okio:1.15.0'
+	
+	//PGMacTips
+	implementation 'com.github.PGMacDesign:PGMacTips:1.3.1'
+	
+	//Dagger: Dependency Injection - https://github.com/google/dagger. Docs - https://google.github.io/dagger/
+	def dagger_version=  "2.22"
+	implementation "com.google.dagger:dagger:$dagger_version"
+	implementation "com.google.dagger:dagger-android:$dagger_version"
+	implementation "com.google.dagger:dagger-android-support:$dagger_version"
+	annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
+	annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+}
