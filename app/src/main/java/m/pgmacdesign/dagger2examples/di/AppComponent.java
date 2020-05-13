@@ -1,6 +1,9 @@
 package m.pgmacdesign.dagger2examples.di;
 
+import android.app.Activity;
 import android.app.Application;
+
+import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -11,9 +14,14 @@ import m.pgmacdesign.dagger2examples.MyApplication;
 /**
  * This will persist across the entirety of the application
  */
+@Singleton
 @Component(
 		modules = {
-				AndroidSupportInjectionModule.class
+				AndroidSupportInjectionModule.class,
+				ActivityBuildersModule.class,
+				AppModule.class,
+				ViewModelFactoryModule.class,
+				
 		}
 )
 public interface AppComponent extends AndroidInjector<MyApplication> {

@@ -10,7 +10,7 @@ public class MyApplication extends DaggerApplication {
 	
 	@Override
 	protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-		// TODO: 5/8/20
 		return DaggerAppComponent.builder().application(this).build();
+//		return null;
 	}
 }
