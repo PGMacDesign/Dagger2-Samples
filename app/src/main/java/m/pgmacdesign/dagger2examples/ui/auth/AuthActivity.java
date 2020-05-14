@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -23,8 +24,10 @@ import com.squareup.picasso.Picasso;
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
+import m.pgmacdesign.dagger2examples.BaseActivity;
 import m.pgmacdesign.dagger2examples.R;
 import m.pgmacdesign.dagger2examples.models.User;
+import m.pgmacdesign.dagger2examples.ui.main.MainActivity;
 import m.pgmacdesign.dagger2examples.viewmodels.ViewModelProviderFactory;
 
 public class AuthActivity extends DaggerAppCompatActivity {
@@ -96,7 +99,7 @@ public class AuthActivity extends DaggerAppCompatActivity {
 //				this.auth_activity_tv.setText(new Gson().toJson(user, User.class));
 //			}
 //		});
-		this.viewModel.observeUser().observe(this, new Observer<AuthResource<User>>() {
+		this.viewModel.observeAuthState().observe(this, new Observer<AuthResource<User>>() {
 			@Override
 			public void onChanged(AuthResource<User> userAuthResource) {
 				if(userAuthResource != null){
@@ -109,6 +112,7 @@ public class AuthActivity extends DaggerAppCompatActivity {
 							showProgressBar(false);
 							if(userAuthResource.data != null) {
 								L.m("Login success. Email == " + userAuthResource.data.getEmail());
+								onLoginSuccess();
 							}
 							
 							break;
@@ -128,11 +132,26 @@ public class AuthActivity extends DaggerAppCompatActivity {
 		});
 	}
 	
+	/**
+	 * Whether or not to show the progress bar
+	 * @param isVisible
+	 */
 	private void showProgressBar(boolean isVisible){
 		if(isVisible){
 			progress_bar.setVisibility(View.VISIBLE);
 		} else {
 			progress_bar.setVisibility(View.GONE);
 		}
+	}
+	
+	
+	/**
+	 * Boots to the login screen
+	 */
+	private void onLoginSuccess(){
+		Intent intent = new Intent(AuthActivity.this, MainActivity.class);
+		this.startActivity(intent);
+		//Any other logout stuff here
+		this.finish();
 	}
 }

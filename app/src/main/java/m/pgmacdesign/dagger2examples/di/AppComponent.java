@@ -10,6 +10,7 @@ import dagger.Component;
 import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 import m.pgmacdesign.dagger2examples.MyApplication;
+import m.pgmacdesign.dagger2examples.SessionManager;
 
 /**
  * This will persist across the entirety of the application
@@ -25,6 +26,8 @@ import m.pgmacdesign.dagger2examples.MyApplication;
 		}
 )
 public interface AppComponent extends AndroidInjector<MyApplication> {
+	
+	SessionManager sessionManager();
 	
 	@Component.Builder
 	interface Builder {

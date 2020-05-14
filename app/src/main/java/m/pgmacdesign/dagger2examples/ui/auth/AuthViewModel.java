@@ -1,8 +1,5 @@
 package m.pgmacdesign.dagger2examples.ui.auth;
 
-import android.widget.ProgressBar;
-
-import androidx.annotation.AnimatorRes;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MediatorLiveData;
@@ -13,68 +10,62 @@ import com.pgmacdesign.pgmactips.utilities.L;
 import javax.inject.Inject;
 
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import m.pgmacdesign.dagger2examples.SessionManager;
 import m.pgmacdesign.dagger2examples.models.User;
 import m.pgmacdesign.dagger2examples.networking.auth.AuthAPI;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class AuthViewModel extends ViewModel {
 	
 	private final AuthAPI authAPI;
-	private MediatorLiveData<AuthResource<User>> authUser = new MediatorLiveData<>();
+	private SessionManager sessionManager;
 	
 	@Inject
-	public AuthViewModel(AuthAPI authAPI){
+	public AuthViewModel(AuthAPI authAPI, SessionManager sessionManager){
 		this.authAPI = authAPI;
+		this.sessionManager = sessionManager;
 		L.m("Making API Call");
 		
 		
 	}
 	
 	public void authenticateWithId(int id){
-		this.authUser.setValue(AuthResource.loading((User)null));
-		final LiveData<AuthResource<User>> source = LiveDataReactiveStreams.fromPublisher(
-				this.authAPI.getUser(id)
-					.onErrorReturn(new Function<Throwable, User>() {
-						@Override
-						public User apply(Throwable throwable) throws Exception {
-							User errorUser = new User();
-							errorUser.setId(-1);
-							return errorUser;
-						}
-					})
-					.map(new Function<User, AuthResource<User>>() {
-						@Override
-						public AuthResource<User> apply(User user) throws Exception {
-							if(user == null){
-								return AuthResource.error("Unknown error", (User)null);
-							}
-							if(user.getId() == -1){
-								return AuthResource.error("Could not authenticate", (User) null);
-							}
-							return AuthResource.authenticated(user);
-							
-						}
-					})
-					.subscribeOn(Schedulers.io())
-		);
-		this.authUser.addSource(source, new androidx.lifecycle.Observer<AuthResource<User>>() {
-			@Override
-			public void onChanged(AuthResource<User> resource) {
-				authUser.setValue(resource);
-				authUser.removeSource(source);
-			}
-		});
+		L.m("Attempting to login");
+		this.sessionManager.authenticateWithId(queryUserId(id));
 	}
 	
-	public LiveData<AuthResource<User>> observeUser(){
-		return this.authUser;
+	private LiveData<AuthResource<User>> queryUserId(int id){
+		return LiveDataReactiveStreams.fromPublisher(
+				this.authAPI.getUser(id)
+						.onErrorReturn(new Function<Throwable, User>() {
+							@Override
+							public User apply(Throwable throwable) throws Exception {
+								User errorUser = new User();
+								errorUser.setId(-1);
+								return errorUser;
+							}
+						})
+						.map(new Function<User, AuthResource<User>>() {
+							@Override
+							public AuthResource<User> apply(User user) throws Exception {
+								if(user == null){
+									return AuthResource.error("Unknown error", (User)null);
+								}
+								if(user.getId() == -1){
+									return AuthResource.error("Could not authenticate", (User) null);
+								}
+								return AuthResource.authenticated(user);
+								
+							}
+						})
+						.subscribeOn(Schedulers.io())
+		);
+	}
+	
+	public LiveData<AuthResource<User>> observeAuthState(){
+		return this.sessionManager.getAuthUser();
 	}
 	
 	private void ignoreSampleCode(){
