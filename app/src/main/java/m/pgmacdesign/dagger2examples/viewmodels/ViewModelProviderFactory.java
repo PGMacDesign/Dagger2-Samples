@@ -8,6 +8,7 @@ import com.pgmacdesign.pgmactips.utilities.MiscUtilities;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 
 public class ViewModelProviderFactory implements ViewModelProvider.Factory {

@@ -22,6 +22,7 @@ import com.pgmacdesign.pgmactips.utilities.StringUtilities;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import dagger.android.support.DaggerAppCompatActivity;
 import m.pgmacdesign.dagger2examples.BaseActivity;
@@ -44,12 +45,20 @@ public class AuthActivity extends DaggerAppCompatActivity {
 	//region Injected Vars
 	
 	@Inject
+//	@Named("app-level")
+//  ^^ @Qualifier annotations are not allowed on @Inject constructors
 	ViewModelProviderFactory providerFactory;
 	@Inject
+	@Named("app-level")
 	DatabaseUtilities dbUtilities;
 	@Inject
+	@Named("app-level")
 	Gson gson;
 	@Inject
+	@Named("module-level")
+	Gson gson2;
+	@Inject
+	@Named("app-level")
 	Picasso picasso;
 	
 	//endregion

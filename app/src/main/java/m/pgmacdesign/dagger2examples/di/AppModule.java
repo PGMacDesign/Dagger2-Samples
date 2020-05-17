@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -69,6 +70,7 @@ public class AppModule {
 	
 	@Singleton
 	@Provides
+	@Named("app-level")
 	static DatabaseUtilities provideDBInstance(Application application){
 		String dbName = "dbname.db";
 		String salt = "saltltlt";
@@ -78,14 +80,17 @@ public class AppModule {
 	
 	@Singleton
 	@Provides
+	@Named("app-level")
 	static Gson provideGson(){
 		return new GsonBuilder()
 				.setLenient()
 				.create();
 	}
 	
+	
 	@Singleton
 	@Provides
+	@Named("app-level")
 	static Picasso providePicassoInstance(Application application){
 		return new Picasso.Builder(application)
 				.listener((picasso, uri, exception) -> {
