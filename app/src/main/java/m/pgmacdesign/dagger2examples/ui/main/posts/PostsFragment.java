@@ -73,6 +73,8 @@ public class PostsFragment extends DaggerFragment {
 						break;
 						
 					case LOADING:
+						
+								//todo figure out how to inject progress bar or direct link up to activity other than through interface
 						L.m("Loading...");
 						break;
 						

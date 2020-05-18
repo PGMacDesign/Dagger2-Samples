@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +28,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 	
 	private DrawerLayout drawerLayout;
 	private NavigationView navigationView;
+	private ProgressBar progress_bar;
 	
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +36,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		this.setContentView(R.layout.activity_main);
 		this.drawerLayout = this.findViewById(R.id.drawer_layout);
 		this.navigationView = this.findViewById(R.id.nav_view);
+		this.progress_bar = this.findViewById(R.id.progress_bar);
 		this.init();
 	}
 	
@@ -103,6 +107,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 		this.drawerLayout.closeDrawer(GravityCompat.START);
 		return true;
 	}
+	
+	
+	/**
+	 * Whether or not to show the progress bar
+	 * @param isVisible
+	 */
+	private void showProgressBar(boolean isVisible){
+		if(isVisible){
+			progress_bar.setVisibility(View.VISIBLE);
+		} else {
+			progress_bar.setVisibility(View.GONE);
+		}
+	}
+	
 	
 	@Override
 	public boolean onSupportNavigateUp() {
